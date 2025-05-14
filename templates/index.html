@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECG Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Google Sans', sans-serif;
+            overflow: hidden; /* Hide scrollbars to ensure particles cover the whole screen */
+        }
+
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Ensure particles are in the background */
+        }
+
+        #home-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        #home-page h1 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 700;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        #start-button {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #start-button:hover {
+            background-color: #0056b3;
+        }
+
+        #upload-section {
+            display: none; /* Hide upload section initially */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        #jumping-heart {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 3em;
+            color: #ff0000;
+            margin-bottom: 20px;
+            animation: jump 1s infinite;
+        }
+
+        @keyframes jump {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        #fact {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-bottom: 20px;
+            min-height: 2em; /* Ensure there's space for the fact text */
+        }
+
+        form {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        button[type="submit"] {
+            font-family: 'Google Sans', sans-serif;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div id="home-page">
+        <h1>Welcome to ECG Classification</h1>
+        <button id="start-button">Start</button>
+    </div>
+    <main id="upload-section">
+        <div id="fact"></div>
+        <div id="jumping-heart">❤️</div>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="file">Upload ECG Data:</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+            <button type="submit">Upload</button>
+        </form>
+    </main>
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 5,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "repulse"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 400,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 0.8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Fun facts about the heart
+        const facts = [
+        "Your heart beats around 100,000 times a day!",
+        "The human heart pumps about 2,000 gallons of blood every day.",
+        "Heart disease is the leading cause of death worldwide.",
+        "Your heart has its own electrical system to regulate its beating.",
+        "The heart is a muscle, but it's different from other muscles in your body.",
+        "The average heart beats about 72 times per minute.",
+        "A healthy heart can pump about 5 liters of blood each minute.",
+        "The heart is located slightly to the left of the center of the chest.",
+        "Women tend to have smaller hearts than men.",
+        "The heart can continue to beat even when it is disconnected from the body.",
+        "The heart is the first organ to form in a developing fetus.",
+        "Exercise can help strengthen your heart and improve its efficiency.",
+        "A person's heart rate can increase by as much as 50% during exercise.",
+        "Stress can affect your heart health and increase your risk of heart disease.",
+        "The heart has four chambers: two atria and two ventricles.",
+        "Your heart is about the size of a fist.",
+        "The heart's natural pacemaker is called the sinoatrial node.",
+        "High blood pressure can damage your heart over time.",
+        "Eating a balanced diet is essential for maintaining heart health.",
+        "Sleeping well is crucial for heart health.",
+        "Regular check-ups can help monitor your heart health."
+    ];
+
+    function typeFact(element, text, i, callback) {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(() => typeFact(element, text, i, callback), 50);
+        } else if (callback) {
+            callback();
+        }
+    }
+
+    function displayRandomFact() {
+        const factElement = document.getElementById('fact');
+        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+        factElement.innerHTML = ''; // Clear any previous text
+        typeFact(factElement, randomFact, 0);
+    }
+
+    function startFactCycle() {
+        displayRandomFact();
+        setInterval(displayRandomFact, 10000); // Change fact every 10 seconds
+    }
+
+    document.getElementById('start-button').addEventListener('click', function() {
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('upload-section').style.display = 'flex';
+        startFactCycle(); // Start the fact cycle when the upload section is shown
+    });
+    </script>
+</body>
+</html>
